@@ -1,9 +1,19 @@
+# 1. Configurações de Segurança e CORS
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, OPTIONS, DELETE, PUT"
+    Header set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
+</IfModule>
+
+# 2. Configurações de Roteamento
 Options -Indexes
 RewriteEngine On
 
-# Allow requests for real files/directories
+# Lida com o pre-flight do CORS (pedidos OPTIONS)
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^(.*)$ index.php [L]
+
+# Se não for um arquivo ou diretório real, manda para o index.php
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-
-# Route everything else through index.php
 RewriteRule ^(.*)$ index.php [QSA,L]
