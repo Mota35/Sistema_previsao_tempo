@@ -78,7 +78,14 @@ class WeatherController {
     public function historico(): void {
         $payload  = AuthMiddleware::handle();
         $limit    = (int)($_GET['limit'] ?? 50);
-        $registos = $this->historico->findByUser($payload['id'], $limit);
+
+        // Admin sees all users' history
+        if ($payload['role'] === 'admin') {
+            $registos = $this->historico->allGlobal($limit);
+        } else {
+            $registos = $this->historico->findByUser($payload['id'], $limit);
+        }
+
         Response::success($registos);
     }
 

@@ -1,0 +1,64 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1>{{ 'favorites.title' | translate }}</h1>
+    <div class="page-actions">
+      <app-export-panel (exportCSV)="exportCSV()" (exportPDF)="exportPDF()"></app-export-panel>
+      <button class="btn btn-primary" (click)="openAdd()">
+        ➕ {{ 'favorites.add' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <app-alert [message]="error"      type="error"   (dismiss)="error=''"></app-alert>
+  <app-alert [message]="successMsg" type="success" (dismiss)="successMsg=''"></app-alert>
+
+  <!-- Add/Edit form -->
+  <div class="modal-overlay" *ngIf="showForm" (click)="showForm=false">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <h2 class="modal-title">{{ editId ? 'Editar' : 'Adicionar' }} Cidade</h2>
+      <form [formGroup]="form" (ngSubmit)="save()">
+        <div class="field">
+          <label>Cidade</label>
+          <input type="text" formControlName="nome_cidade" placeholder="Ex: Luanda">
+        </div>
+        <div class="field">
+          <label>País (código)</label>
+          <input type="text" formControlName="pais" placeholder="Ex: AO" maxlength="5">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" (click)="showForm=false">
+            {{ 'common.cancel' | translate }}
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
+            {{ 'common.save' | translate }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <app-loading-spinner [loading]="loading"></app-loading-spinner>
+
+  <div class="favorites-grid" *ngIf="!loading">
+    <div class="favorite-card" *ngFor="let fav of favorites">
+      <div class="fav-card__body">
+        <div class="fav-card__icon">🌍</div>
+        <div class="fav-card__info">
+          <h3>{{ fav.nome_cidade }}</h3>
+          <span class="country-badge">{{ fav.pais }}</span>
+          <p class="fav-date">Adicionada {{ fav.adicionada_em | date:'dd/MM/yyyy' }}</p>
+        </div>
+      </div>
+      <div class="fav-card__actions">
+        <button class="btn-icon btn-edit" (click)="openEdit(fav)" title="Editar">✏️</button>
+        <button class="btn-icon btn-del" (click)="remove(fav.id)" title="Remover">🗑️</button>
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="!favorites.length">
+      <div class="empty-icon">⭐</div>
+      <p>{{ 'common.noData' | translate }}</p>
+      <button class="btn btn-primary" (click)="openAdd()">Adicionar primeira cidade</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,62 @@
+<div class="dashboard-page">
+  <!-- Alerts -->
+  <app-alert [message]="error"      type="error"   (dismiss)="error=''"></app-alert>
+  <app-alert [message]="successMsg" type="success" (dismiss)="successMsg=''"></app-alert>
+
+  <!-- Search bar -->
+  <div class="search-section">
+    <div class="search-box">
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        (keyup.enter)="search()"
+        [placeholder]="'weather.search' | translate"
+        class="search-input"
+      />
+      <button class="btn btn-primary search-btn" (click)="search()" [disabled]="loading">
+        <span *ngIf="!loading">🔍</span>
+        <app-loading-spinner [loading]="loading" [inline]="true"></app-loading-spinner>
+      </button>
+      <button class="btn btn-secondary geo-btn" (click)="useGeolocation()" [disabled]="geoLoading" title="Usar localização">
+        <span *ngIf="!geoLoading">📍</span>
+        <app-loading-spinner [loading]="geoLoading" [inline]="true"></app-loading-spinner>
+      </button>
+    </div>
+
+    <!-- Favorite chips -->
+    <div class="fav-chips" *ngIf="favorites.length">
+      <button
+        *ngFor="let fav of favorites"
+        class="fav-chip"
+        (click)="searchByCity(fav)"
+      >
+        📌 {{ fav.nome_cidade }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Current weather -->
+  <app-weather-card
+    *ngIf="weather"
+    [data]="weather"
+    [isFavorite]="isFavorite()"
+    (addFavorite)="addToFavorites()"
+  ></app-weather-card>
+
+  <!-- Forecast -->
+  <div class="forecast-section" *ngIf="forecast">
+    <h2 class="section-title">{{ 'weather.forecast' | translate }}</h2>
+    <div class="forecast-grid">
+      <app-forecast-card
+        *ngFor="let item of forecast.list | slice:0:8"
+        [item]="item"
+      ></app-forecast-card>
+    </div>
+  </div>
+
+  <!-- Empty state -->
+  <div class="empty-state" *ngIf="!weather && !loading">
+    <div class="empty-icon">🌤️</div>
+    <p>Pesquise uma cidade para ver o clima</p>
+  </div>
+</div>

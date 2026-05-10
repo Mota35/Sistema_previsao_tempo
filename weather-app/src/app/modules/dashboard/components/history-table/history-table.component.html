@@ -1,0 +1,56 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1>{{ 'history.title' | translate }}</h1>
+    <div class="page-actions">
+      <app-export-panel
+        (exportCSV)="exportCSV()"
+        (exportPDF)="exportPDF()"
+      ></app-export-panel>
+      <button class="btn btn-danger" (click)="clear()" [disabled]="!history.length">
+        🗑️ {{ 'history.clear' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <app-alert [message]="error"      type="error"   (dismiss)="error=''"></app-alert>
+  <app-alert [message]="successMsg" type="success" (dismiss)="successMsg=''"></app-alert>
+
+  <div class="table-toolbar">
+    <input
+      type="text"
+      [(ngModel)]="filterText"
+      [placeholder]="'common.search' | translate"
+      class="table-search"
+    />
+    <span class="record-count">{{ filteredHistory.length }} registos</span>
+  </div>
+
+  <app-loading-spinner [loading]="loading" [label]="'common.loading' | translate"></app-loading-spinner>
+
+  <div class="table-wrapper" *ngIf="!loading">
+    <table class="data-table" *ngIf="filteredHistory.length; else empty">
+      <thead>
+        <tr>
+          <th>{{ 'history.city' | translate }}</th>
+          <th>{{ 'history.temp' | translate }}</th>
+          <th>{{ 'history.climate' | translate }}</th>
+          <th>{{ 'history.date' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let h of filteredHistory">
+          <td><strong>{{ h.cidade_consultada }}</strong></td>
+          <td><span class="temp-badge">{{ h.temperatura | number:'1.1-1' }}°C</span></td>
+          <td>{{ h.clima | titlecase }}</td>
+          <td class="date-cell">{{ h.data_consulta | date:'dd/MM/yyyy HH:mm' }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <ng-template #empty>
+      <div class="empty-state">
+        <div class="empty-icon">📋</div>
+        <p>{{ 'common.noData' | translate }}</p>
+      </div>
+    </ng-template>
+  </div>
+</div>

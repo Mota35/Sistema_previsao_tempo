@@ -1,0 +1,43 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-logo">⛅</div>
+    <h1 class="auth-title">WeatherApp</h1>
+    <p class="auth-subtitle">{{ 'auth.login' | translate }}</p>
+
+    <app-alert [message]="error" type="error" (dismiss)="error=''"></app-alert>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <div class="field">
+        <label>{{ 'auth.email' | translate }}</label>
+        <input type="email" formControlName="email" autocomplete="email" placeholder="email@exemplo.com">
+        <span class="field-error" *ngIf="form.get('email')?.touched && form.get('email')?.invalid">
+          Email inválido
+        </span>
+      </div>
+
+      <div class="field">
+        <label>{{ 'auth.password' | translate }}</label>
+        <div class="input-group">
+          <input [type]="showPwd ? 'text' : 'password'" formControlName="senha" autocomplete="current-password" placeholder="••••••">
+          <button type="button" class="pwd-toggle" (click)="showPwd=!showPwd">
+            {{ showPwd ? '🙈' : '👁️' }}
+          </button>
+        </div>
+      </div>
+
+      <div class="field-link">
+        <a routerLink="/auth/forgot-password">{{ 'auth.forgot' | translate }}</a>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-full" [disabled]="loading || form.invalid">
+        <app-loading-spinner [loading]="loading" [inline]="true"></app-loading-spinner>
+        <span *ngIf="!loading">{{ 'auth.login' | translate }}</span>
+      </button>
+    </form>
+
+    <p class="auth-switch">
+      {{ 'auth.noAccount' | translate }}
+      <a routerLink="/auth/register">{{ 'auth.register' | translate }}</a>
+    </p>
+  </div>
+</div>

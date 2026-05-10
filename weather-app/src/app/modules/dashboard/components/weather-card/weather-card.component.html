@@ -1,0 +1,50 @@
+<div class="weather-card" *ngIf="data">
+  <div class="weather-card__header">
+    <div class="weather-card__location">
+      <h2>{{ data.cidade }}, <span class="country">{{ data.pais }}</span></h2>
+      <p class="climate-desc">{{ data.clima | titlecase }}</p>
+    </div>
+    <div class="weather-card__icon">
+      <img [src]="weatherSvc.getIconUrl(data.icone, 4)" [alt]="data.clima" loading="lazy" />
+    </div>
+  </div>
+
+  <div class="weather-card__temp">
+    <span class="temp-main">{{ data.temperatura | number:'1.0-0' }}°C</span>
+    <span class="temp-feels">{{ 'weather.feels' | translate }}: {{ data.sensacao | number:'1.0-0' }}°C</span>
+  </div>
+
+  <div class="weather-card__stats">
+    <div class="stat">
+      <span class="stat-icon">💧</span>
+      <span class="stat-label">{{ 'weather.humidity' | translate }}</span>
+      <span class="stat-value">{{ data.humidade }}%</span>
+    </div>
+    <div class="stat">
+      <span class="stat-icon">💨</span>
+      <span class="stat-label">{{ 'weather.wind' | translate }}</span>
+      <span class="stat-value">{{ data.vento }} m/s</span>
+    </div>
+    <div class="stat">
+      <span class="stat-icon">🔵</span>
+      <span class="stat-label">{{ 'weather.pressure' | translate }}</span>
+      <span class="stat-value">{{ data.pressao }} hPa</span>
+    </div>
+    <div class="stat">
+      <span class="stat-icon">👁️</span>
+      <span class="stat-label">{{ 'weather.visibility' | translate }}</span>
+      <span class="stat-value">{{ data.visibilidade }} km</span>
+    </div>
+  </div>
+
+  <div class="weather-card__actions">
+    <button
+      class="btn btn-fav"
+      [class.is-fav]="isFavorite"
+      [disabled]="isFavorite"
+      (click)="addFavorite.emit()"
+    >
+      {{ isFavorite ? '⭐ Nos favoritos' : ('weather.addFav' | translate) }}
+    </button>
+  </div>
+</div>

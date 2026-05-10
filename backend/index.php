@@ -23,6 +23,7 @@ $autoload = [
     __DIR__ . '/models/HistoricoModel.php',
     __DIR__ . '/services/WeatherService.php',
     __DIR__ . '/controllers/AuthController.php',
+    __DIR__ . '/controllers/UserController.php',
     __DIR__ . '/controllers/CidadesFavoritasController.php',
     __DIR__ . '/controllers/WeatherController.php',
 ];
@@ -32,6 +33,7 @@ foreach ($autoload as $file) require_once $file;
 $method = $_SERVER['REQUEST_METHOD'];
 $uri    = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri    = rtrim($uri, '/');
+$uri = preg_replace('#^/backend#', '', $uri);
 
 // Strip base prefix if running in a sub-folder, e.g. /backend
 // $uri = preg_replace('#^/backend#', '', $uri);
@@ -67,6 +69,19 @@ try {
 
     } elseif ($method === 'POST' && $uri === '/auth/redefinir-senha') {
         (new AuthController)->redefinirSenha();
+
+    // ── USER MANAGEMENT (Admin) ───────────────────────────────────────────────
+    } elseif ($method === 'GET' && $uri === '/auth/users') {
+        (new UserController)->index();
+
+    } elseif ($method === 'GET' && matchRoute('/auth/users/{id}', $uri, $params)) {
+        (new UserController)->show((int)$params[0]);
+
+    } elseif ($method === 'DELETE' && matchRoute('/auth/users/{id}', $uri, $params)) {
+        (new UserController)->destroy((int)$params[0]);
+
+    } elseif ($method === 'PUT' && matchRoute('/auth/users/{id}/role', $uri, $params)) {
+        (new UserController)->updateRole((int)$params[0]);
 
     // ── CIDADES FAVORITAS ─────────────────────────────────────────────────────
     } elseif ($method === 'GET' && $uri === '/cidades-favoritas/exportar') {

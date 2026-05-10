@@ -1,0 +1,55 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-logo">⛅</div>
+    <h1 class="auth-title">WeatherApp</h1>
+    <p class="auth-subtitle">{{ 'auth.register' | translate }}</p>
+
+    <app-alert [message]="error" type="error" (dismiss)="error=''"></app-alert>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <div class="field">
+        <label>{{ 'auth.name' | translate }}</label>
+        <input type="text" formControlName="nome" autocomplete="name" placeholder="Seu nome">
+        <span class="field-error" *ngIf="form.get('nome')?.touched && form.get('nome')?.invalid">
+          Nome obrigatório (mín. 2 caracteres)
+        </span>
+      </div>
+
+      <div class="field">
+        <label>{{ 'auth.email' | translate }}</label>
+        <input type="email" formControlName="email" autocomplete="email" placeholder="email@exemplo.com">
+        <span class="field-error" *ngIf="form.get('email')?.touched && form.get('email')?.invalid">
+          Email inválido
+        </span>
+      </div>
+
+      <div class="field">
+        <label>{{ 'auth.password' | translate }}</label>
+        <div class="input-group">
+          <input [type]="showPwd ? 'text' : 'password'" formControlName="senha" placeholder="Mínimo 6 caracteres">
+          <button type="button" class="pwd-toggle" (click)="showPwd=!showPwd">
+            {{ showPwd ? '🙈' : '👁️' }}
+          </button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Confirmar Senha</label>
+        <input [type]="showPwd ? 'text' : 'password'" formControlName="confirm" placeholder="Repita a senha">
+        <span class="field-error" *ngIf="form.hasError('mismatch') && form.get('confirm')?.touched">
+          As senhas não coincidem
+        </span>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-full" [disabled]="loading || form.invalid">
+        <app-loading-spinner [loading]="loading" [inline]="true"></app-loading-spinner>
+        <span *ngIf="!loading">Criar Conta</span>
+      </button>
+    </form>
+
+    <p class="auth-switch">
+      {{ 'auth.hasAccount' | translate }}
+      <a routerLink="/auth/login">{{ 'auth.login' | translate }}</a>
+    </p>
+  </div>
+</div>

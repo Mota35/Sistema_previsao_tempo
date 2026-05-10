@@ -1,0 +1,35 @@
+<nav class="navbar">
+  <div class="navbar-brand">
+    <span class="brand-icon">⛅</span>
+    <span class="brand-text">WeatherApp</span>
+  </div>
+
+  <button class="hamburger" (click)="toggleMenu()" [class.open]="menuOpen" aria-label="menu">
+    <span></span><span></span><span></span>
+  </button>
+
+  <div class="navbar-menu" [class.open]="menuOpen">
+    <ng-container *ngIf="auth.isLoggedIn">
+      <a routerLink="/dashboard" routerLinkActive="active" (click)="menuOpen=false">
+        {{ 'nav.dashboard' | translate }}
+      </a>
+      <a routerLink="/dashboard/favorites" routerLinkActive="active" (click)="menuOpen=false">
+        {{ 'nav.favorites' | translate }}
+      </a>
+      <a routerLink="/dashboard/history" routerLinkActive="active" (click)="menuOpen=false">
+        {{ 'nav.history' | translate }}
+      </a>
+      <a *ngIf="auth.isAdmin" routerLink="/dashboard/admin" routerLinkActive="active" (click)="menuOpen=false">
+        {{ 'nav.admin' | translate }}
+      </a>
+    </ng-container>
+
+    <div class="navbar-actions">
+      <app-theme-toggle></app-theme-toggle>
+      <app-lang-toggle></app-lang-toggle>
+      <button *ngIf="auth.isLoggedIn" class="btn-logout" (click)="logout()">
+        {{ 'nav.logout' | translate }}
+      </button>
+    </div>
+  </div>
+</nav>

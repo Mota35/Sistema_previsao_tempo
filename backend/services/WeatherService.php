@@ -1,7 +1,7 @@
 <?php
 
 class WeatherService {
-    private string $apiKey  = 'YOUR_OPENWEATHERMAP_API_KEY';
+    private string $apiKey  = '1575f1947fc68e88f4dbf4bb9de8a9fe';
     private string $baseUrl = 'https://api.openweathermap.org/data/2.5';
     private string $units   = 'metric'; // metric = Celsius
     private string $lang    = 'pt';

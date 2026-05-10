@@ -1,0 +1,8 @@
+<button
+  class="icon-btn"
+  (click)="theme.toggle()"
+  [attr.aria-label]="theme.current === 'dark' ? 'Modo claro' : 'Modo escuro'"
+>
+  <span *ngIf="theme.current === 'dark'">☀️</span>
+  <span *ngIf="theme.current === 'light'">🌙</span>
+</button>

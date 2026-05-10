@@ -29,6 +29,21 @@ class HistoricoModel {
         $stmt->execute([$utilizadorId]);
     }
 
+    /**
+     * Admin only: all users' history joined with user data.
+     */
+    public function allGlobal(int $limit = 200): array {
+        $stmt = $this->db->prepare(
+            'SELECT h.*, u.nome AS utilizador, u.email
+             FROM historico_consultas h
+             JOIN utilizadores u ON u.id = h.utilizador_id
+             ORDER BY h.data_consulta DESC
+             LIMIT ?'
+        );
+        $stmt->execute([$limit]);
+        return $stmt->fetchAll();
+    }
+
     public function allForExport(int $utilizadorId): array {
         $stmt = $this->db->prepare(
             'SELECT h.cidade_consultada, h.temperatura, h.clima, h.data_consulta,

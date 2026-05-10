@@ -1,0 +1,8 @@
+<div class="export-panel">
+  <button class="btn btn-export csv" (click)="exportCSV.emit()">
+    📊 {{ 'export.csv' | translate }}
+  </button>
+  <button class="btn btn-export pdf" (click)="exportPDF.emit()">
+    📄 {{ 'export.pdf' | translate }}
+  </button>
+</div>

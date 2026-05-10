@@ -1,0 +1,14 @@
+<div class="forecast-card">
+  <p class="forecast-time">{{ item.dt_txt | date:'EEE HH:mm' }}</p>
+  <img
+    [src]="ws.getIconUrl(item.weather[0].icon)"
+    [alt]="item.weather[0].description"
+    loading="lazy"
+  />
+  <p class="forecast-temp">{{ item.main.temp | number:'1.0-0' }}°C</p>
+  <p class="forecast-desc">{{ item.weather[0].description | titlecase }}</p>
+  <div class="forecast-meta">
+    <span>💧 {{ item.main.humidity }}%</span>
+    <span>💨 {{ item.wind.speed }}m/s</span>
+  </div>
+</div>
